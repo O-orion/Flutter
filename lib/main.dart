@@ -88,28 +88,30 @@ class editor extends StatelessWidget {
 }
 
 class transferencia extends StatelessWidget {
+  final List<dadosTransferencia> _transferencias = [];
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    _transferencias.add(dadosTransferencia(1000, 555));
     return Scaffold(
       appBar: AppBar(
         title: Text("JESUS CRISTO É O SENHOR!"),
       ),
       //Adicionando um appBar em nosso aplicativo
-      body: Column(
-        children: [
-          cardTransferencia(dadosTransferencia(100, 2001)),
-          cardTransferencia(dadosTransferencia(400, 2001)),
-          cardTransferencia(dadosTransferencia(200, 2001)),
-          cardTransferencia(dadosTransferencia(300, 2001)),
-        ],
+      body: ListView.builder(
+        itemCount: _transferencias.length,
+        itemBuilder: (context, indice) {
+          final transferencia = _transferencias[indice];
+          return cardTransferencia(transferencia);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final Future<dadosTransferencia?> future = Navigator.push(context, MaterialPageRoute(builder: (context) {
             return formularioTransferencia(); //retornando a pagina de formulário
           }));
-          future.then((transferencia) => debugPrint(transferencia.toString()));
+          future.then((transferencia) => _transferencias.add(transferencia!));
         },
         child: Icon(Icons.add),
       ),
@@ -119,7 +121,6 @@ class transferencia extends StatelessWidget {
 
 class cardTransferencia extends StatelessWidget {
   final dadosTransferencia _transferenciaDados;
-
   cardTransferencia(this._transferenciaDados);
 
   @override
